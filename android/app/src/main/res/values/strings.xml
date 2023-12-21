@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ShareIt</string>
+    <string name="facebook_app_id">1367845664076026</string>
+    <string name="fb_login_protocol_scheme">fb1367845664076026</string>
+    <string name="facebook_client_token">483a6d75bc60356f6c5385ba7c01deb3</string>
+</resources>
