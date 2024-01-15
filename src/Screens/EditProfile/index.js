@@ -61,7 +61,8 @@ const EditProfile = () => {
   // const reducerData = useSelector(state => state);
   const [banner, setBanner] = useState();
   const [localImageStatus, setLocalImageStatus] = useState(false);
-  const [valueFullName, onChangeFullName] = useState('');
+  const [valueFirstName, onChangeFirstName] = useState('');
+  const [valueLastName, onChangeLastName] = useState(''); 
   const [valuePhoneNumber, onChangePhoneNumber] = useState('');
   const [valueAddress, onChangeAddress] = useState('');
   const [error, onChangeError] = useState('');
@@ -80,7 +81,8 @@ const EditProfile = () => {
   useEffect(() => {
     if (AuthReducer?.userData?.user) {
       setLoading(true);
-      onChangeFullName(AuthReducer?.userData?.user?.profile?.display_name);
+      onChangeFirstName(AuthReducer?.userData?.user?.profile?.first_name);
+      onChangeLastName(AuthReducer?.userData?.user?.profile?.last_name);
       onChangePhoneNumber(AuthReducer?.userData?.user?.profile?.telephone);
       onChangeAddress(AuthReducer?.userData?.user?.profile?.street);
       onChangeProfileImage(
@@ -141,15 +143,22 @@ const EditProfile = () => {
   let obj;
 
   const validateFields = (
-    valueFullName,
+    // valueFullName,
+    valueFirstName,
+    valueLastName,
     // valueEmail,
     valuePhoneNumber,
     valueAddress,
     // profileImage,
   ) => {
     // Validation for Full Name
-    if (!valueFullName.trim()) {
-      onChangeError('Full Name Should not be empty.');
+    if (!valueFirstName.trim()) {
+      onChangeError('First Name Should not be empty.');
+      return false;
+    }
+
+    if (!valueLastName.trim()) {
+      onChangeError('Last Name Should not be empty.');
       return false;
     }
 
@@ -195,7 +204,9 @@ const EditProfile = () => {
 
   function EditProfile() {
     const isValid = validateFields(
-      valueFullName,
+      // valueFullName,
+      valueFirstName,
+      valueLastName,
       // valueEmail,
       valuePhoneNumber,
       valueAddress,
@@ -209,7 +220,9 @@ const EditProfile = () => {
       var formdataProfile = new FormData();
 
       formdataProfile.append('email', AuthReducer?.userData?.user?.email);
-      formdataProfile.append('display_name', valueFullName);
+      // formdataProfile.append('display_name', valueFullName);
+      formdataProfile.append('first_name', valueFirstName);
+      formdataProfile.append('last_name', valueLastName);
       formdataProfile.append('telephone', valuePhoneNumber);
       formdataProfile.append('street', valueAddress);
       setLoading(true);
@@ -397,7 +410,7 @@ const EditProfile = () => {
         ) : (
           <View style={{ flex: 1, flexGrow: 1 }}>
             <View style={{ marginHorizontal: '5%' }}>
-              <View style={{ flexDirection: 'column', marginTop: '2%' }}>
+              <View style={{ flexDirection: 'column', marginTop: '2%', marginBottom: '2%' }}>
                 <Formik
                   enableReinitialize={true}
                   initialValues={{
@@ -447,7 +460,7 @@ const EditProfile = () => {
                               }}>
                               <Image
                                 source={{
-                                  uri: `http://23.26.137.178${AuthReducer?.userData?.user?.profile?.profile_pic}`,
+                                  uri: `https://shareitstoryapp.com${AuthReducer?.userData?.user?.profile?.profile_pic}`,
                                 }}
                                 style={{
                                   width: 130,
@@ -489,12 +502,35 @@ const EditProfile = () => {
                               }}>
                               <View style={{ marginVertical: '4%' }}>
                                 <Input
-                                  title={'Full Name'}
+                                  title={'First Name'}
                                   urlImg={require('../../Assets/Images/nameprofile.png')}
-                                  placeholder={'Enter your name'}
-                                  value={valueFullName}
+                                  placeholder={'Enter first name'}
+                                  value={valueFirstName}
                                   // value={dataFromOtpScreenOfSignUp.email}
-                                  onChangeText={onChangeFullName}
+                                  onChangeText={onChangeFirstName}
+                                />
+                                {errors.fullName && touched.fullName && (
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: 'red',
+                                      marginTop: 5,
+                                      marginBottom: 5,
+                                      marginLeft: 15,
+                                    }}>
+                                    {errors.fullName}
+                                  </Text>
+                                )}
+                              </View>
+
+                              <View style={{ marginVertical: '4%' }}>
+                                <Input
+                                  title={'Last Name'}
+                                  urlImg={require('../../Assets/Images/nameprofile.png')}
+                                  placeholder={'Enter last name'}
+                                  value={valueLastName}
+                                  // value={dataFromOtpScreenOfSignUp.email}
+                                  onChangeText={onChangeLastName}
                                 />
                                 {errors.fullName && touched.fullName && (
                                   <Text
@@ -599,6 +635,18 @@ const EditProfile = () => {
                               press={handleSubmit}
                             />
                           </View> */}
+                           <View>
+                                {error && (
+                                  <>
+                                    <InteractParagraph
+                                      txtAlign={'center'}
+                                      p={error}
+                                      // mv={4}
+                                      colors={'#FA2D2D'}
+                                    />
+                                  </>
+                                )}
+                              </View>
                               <View>
                                 <TouchableOpacity
                                   onPress={() => {
@@ -613,8 +661,8 @@ const EditProfile = () => {
                                   }}
                                   style={{
                                     flex: 1,
-                                    width: '90%',
-                                    marginHorizontal: '5%',
+                                    width: '76%',
+                                    marginHorizontal: '12%',
                                     height: 50,
                                     backgroundColor: '#7ACCCA',
                                     // borderWidth: 1,
@@ -637,18 +685,7 @@ const EditProfile = () => {
                                   </Text>
                                 </TouchableOpacity>
                               </View>
-                              <View>
-                                {error && (
-                                  <>
-                                    <InteractParagraph
-                                      txtAlign={'center'}
-                                      p={error}
-                                      mv={4}
-                                      colors={'#FA2D2D'}
-                                    />
-                                  </>
-                                )}
-                              </View>
+                             
                             </View>
                           </View>
                         </ScrollView>

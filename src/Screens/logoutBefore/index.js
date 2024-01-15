@@ -60,7 +60,7 @@ export default function LogOutBefore() {
       })
       .catch(error => {
         setLoading(false);
-        console.log('errorbbbbb', error);
+        console.log('errorbbbbb 9', error);
       });
   }
 

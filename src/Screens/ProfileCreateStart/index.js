@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -14,28 +14,28 @@ import {
 } from 'react-native';
 import COLORS from '../../Assets/Style/Color';
 import Heading from '../../Components/ReusableComponent/Heading';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import {ScrollView} from 'react-native-gesture-handler';
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import Input from '../../Components/ReusableComponent/Input';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import ButtonComp from '../../Components/ReusableComponent/Button';
 import LinearGradient from 'react-native-linear-gradient';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {BASE_URL} from '../../App/api';
-import {useDispatch, useSelector} from 'react-redux';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { BASE_URL } from '../../App/api';
+import { useDispatch, useSelector } from 'react-redux';
 // import {
 //   getDataFromAsync,
 //   setDataToAsync,
 // } from '../../Utils/getAndSetAsyncStorage';
-import {userDataFromAsyncStorage} from '../../Store/Reducers/AuthReducer';
+import { userDataFromAsyncStorage } from '../../Store/Reducers/AuthReducer';
 // import {removeOtpScreen} from '../../Store/Reducers/ScreenReducer';
-import {Loader} from '../../Components/ReusableComponent/Loader';
+import { Loader } from '../../Components/ReusableComponent/Loader';
 import {
   getRequestWithCookie,
   postRequestWithTokenAndCookie,
@@ -44,10 +44,10 @@ import {
   getDataFromAsync,
   setDataToAsync,
 } from '../../utils/getAndSetAsyncStorage';
-import {removeOtpScreen} from '../../Store/Reducers/ScreenReducer.js';
+import { removeOtpScreen } from '../../Store/Reducers/ScreenReducer.js';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
 
-export const ProfileCreateStart = ({route}) => {
+export const ProfileCreateStart = ({ route }) => {
   const Navigation = useNavigation();
   const dispatch = useDispatch();
   const userAuth = useSelector(state => state.AuthReducer);
@@ -55,7 +55,8 @@ export const ProfileCreateStart = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [userData, setUserData] = useState({});
-  const [valueFullName, onChangeFullName] = useState('');
+  const [valueFirstName, onChangeFirstName] = useState('');
+  const [valueLastName, onChangeLastName] = useState('');
   const [valueEmail, onChangeEmail] = useState('');
   const [valuePhoneNumber, onChangePhoneNumber] = useState('');
   const [valueAddress, onChangeAddress] = useState('');
@@ -74,7 +75,7 @@ export const ProfileCreateStart = ({route}) => {
       .required('Email address is required '),
     password: yup
       .string()
-      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required('Password is required '),
   });
 
@@ -137,15 +138,22 @@ export const ProfileCreateStart = ({route}) => {
   };
 
   const validateFields = (
-    valueFullName,
+    // valueFullName,
+    valueFirstName,
+    valueLastName,
     // valueEmail,
     valuePhoneNumber,
     valueAddress,
     // profileImage,
   ) => {
     // Validation for Full Name
-    if (!valueFullName.trim()) {
-      onChangeError('Full Name Should not be empty.');
+    if (!valueFirstName.trim()) {
+      onChangeError('First Name Should not be empty.');
+      return false;
+    }
+
+    if (!valueLastName.trim()) {
+      onChangeError('Last Name Should not be empty.');
       return false;
     }
 
@@ -191,7 +199,9 @@ export const ProfileCreateStart = ({route}) => {
 
   function CreateProfile() {
     const isValid = validateFields(
-      valueFullName,
+      // valueFullName,
+      valueFirstName,
+      valueLastName,
       // valueEmail,
       valuePhoneNumber,
       valueAddress,
@@ -203,7 +213,9 @@ export const ProfileCreateStart = ({route}) => {
 
       var formdataProfile = new FormData();
 
-      formdataProfile.append('display_name', valueFullName);
+      // formdataProfile.append('display_name', valueFullName);
+      formdataProfile.append('first_name', valueFirstName);
+      formdataProfile.append('last_name', valueLastName);
       formdataProfile.append('telephone', valuePhoneNumber);
       formdataProfile.append('email', userAuth?.userData?.user?.email);
       formdataProfile.append('street', valueAddress);
@@ -331,19 +343,19 @@ export const ProfileCreateStart = ({route}) => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{alignSelf: 'flex-end', marginBottom: -20}}>
+            <View style={{ alignSelf: 'flex-end', marginBottom: -20 }}>
               <Pressable
                 onPress={() => {
                   setModalVisible(false);
                 }}>
                 <Image
                   source={require('../../Assets/Images/cross.png')}
-                  style={{width: 18}}
+                  style={{ width: 18 }}
                   resizeMode="contain"
                 />
               </Pressable>
             </View>
-            <View style={{marginBottom: 30, marginHorizontal: 10}}>
+            <View style={{ marginBottom: 30, marginHorizontal: 10 }}>
               <Heading
                 Heading={'Precious Metals Portfolio Tool'}
                 Fontsize={16}
@@ -441,7 +453,7 @@ export const ProfileCreateStart = ({route}) => {
               onPress={openCamera}>
               <Icons name="photo-camera" color={'#fff'} size={30} />
             </Pressable>
-            <InteractParagraph p={'Camera'} fw={500} />
+            <InteractParagraph p={'Camera'} fw={500} colors={'#7ACCCA'} />
           </View>
           <View
             style={{
@@ -461,13 +473,13 @@ export const ProfileCreateStart = ({route}) => {
               onPress={openGallery}>
               <Icons name="photo-library" color={'#fff'} size={30} />
             </Pressable>
-            <InteractParagraph p={' Gallery'} fw={500} />
+            <InteractParagraph p={' Gallery'} fw={500} colors={'#7ACCCA'} />
           </View>
         </View>
       </RBSheet>
 
       <Formik
-        initialValues={{email: '', password: ''}}
+        initialValues={{ email: '', password: '' }}
         validateOnMount={true}
         onSubmit={values => {
           simpleLogin(values);
@@ -490,7 +502,7 @@ export const ProfileCreateStart = ({route}) => {
                 <ImageBackground
                   // source={require('../../Assets/Images/bg.png')}
                   resizeMode="cover"
-                  style={{flex: 1}}>
+                  style={{ flex: 1 }}>
                   <ScrollView>
                     <View
                       style={{
@@ -531,7 +543,7 @@ export const ProfileCreateStart = ({route}) => {
                           source={
                             !profileImage
                               ? require('../../Assets/Images/profilecreate.png')
-                              : {uri: profileImage}
+                              : { uri: profileImage }
                           }
                           style={{
                             width: 140,
@@ -565,14 +577,14 @@ export const ProfileCreateStart = ({route}) => {
                         </Pressable>
                       </View>
 
-                      <View style={{marginVertical: '4%'}}>
+                      <View style={{ marginVertical: '4%' }}>
                         <Input
-                          title={'Full Name'}
+                          title={'First Name'}
                           urlImg={require('../../Assets/Images/nameprofile.png')}
-                          placeholder={'Enter your name'}
-                          value={valueFullName}
+                          placeholder={'Enter first name'}
+                          value={valueFirstName}
                           // value={dataFromOtpScreenOfSignUp.email}
-                          onChangeText={onChangeFullName}
+                          onChangeText={onChangeFirstName}
                         />
                         {errors.fullName && touched.fullName && (
                           <Text
@@ -588,7 +600,30 @@ export const ProfileCreateStart = ({route}) => {
                         )}
                       </View>
 
-                      <View style={{marginVertical: '4%'}}>
+                      <View style={{ marginVertical: '4%' }}>
+                        <Input
+                          title={'Last Name'}
+                          urlImg={require('../../Assets/Images/nameprofile.png')}
+                          placeholder={'Enter last name'}
+                          value={valueLastName}
+                          // value={dataFromOtpScreenOfSignUp.email}
+                          onChangeText={onChangeLastName}
+                        />
+                        {errors.fullName && touched.fullName && (
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: 'red',
+                              marginTop: 5,
+                              marginBottom: 5,
+                              marginLeft: 15,
+                            }}>
+                            {errors.fullName}
+                          </Text>
+                        )}
+                      </View>
+
+                      <View style={{ marginVertical: '4%' }}>
                         <Input
                           title={'Email'}
                           urlImg={require('../../Assets/Images/emailcreate.png')}
@@ -613,7 +648,7 @@ export const ProfileCreateStart = ({route}) => {
                         )}
                       </View>
 
-                      <View style={{marginVertical: '4%'}}>
+                      <View style={{ marginVertical: '4%' }}>
                         <Input
                           title={'Phone Number'}
                           urlImg={require('../../Assets/Images/phone.png')}
@@ -637,7 +672,7 @@ export const ProfileCreateStart = ({route}) => {
                         )}
                       </View>
 
-                      <View style={{marginVertical: '4%'}}>
+                      <View style={{ marginVertical: '4%' }}>
                         <Input
                           title={'Adress'}
                           urlImg={require('../../Assets/Images/address.png')}
@@ -688,6 +723,18 @@ export const ProfileCreateStart = ({route}) => {
                       </View> */}
 
                       <View>
+                        {error && (
+                          <>
+                            <InteractParagraph
+                              txtAlign={'center'}
+                              p={error}
+                              mv={4}
+                              colors={'#FA2D2D'}
+                            />
+                          </>
+                        )}
+                      </View>
+                      <View>
                         <TouchableOpacity
                           onPress={() => {
                             // Call the function with the data to be sent
@@ -701,8 +748,8 @@ export const ProfileCreateStart = ({route}) => {
                           }}
                           style={{
                             flex: 1,
-                            width: '90%',
-                            marginHorizontal: '5%',
+                            width: '76%',
+                            marginHorizontal: '12%',
                             height: 50,
                             backgroundColor: '#7ACCCA',
                             // borderWidth: 1,
@@ -725,18 +772,7 @@ export const ProfileCreateStart = ({route}) => {
                           </Text>
                         </TouchableOpacity>
                       </View>
-                      <View>
-                        {error && (
-                          <>
-                            <InteractParagraph
-                              txtAlign={'center'}
-                              p={error}
-                              mv={4}
-                              colors={'#FA2D2D'}
-                            />
-                          </>
-                        )}
-                      </View>
+
                     </View>
                   </ScrollView>
                 </ImageBackground>

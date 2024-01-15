@@ -15,8 +15,8 @@ const RatingStars = ({rating}) => {
               : require('../../Assets/Images/newimages/blackstar.png')
           }
           style={{
-            width: 12.89,
-            height: 13.31,
+            width: 14.89,
+            // height: 14.31,
             marginRight: 5,
           }}
         />,

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Image,
   Pressable,
@@ -23,36 +23,36 @@ import coins from '../../Assets/Images/Header/coins.png';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
 import Heading from '../../Components/ReusableComponent/Heading';
 import styles from './style';
-import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
-import {ScrollView, Swipeable} from 'react-native-gesture-handler';
+import { actions, RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import { ScrollView, Swipeable } from 'react-native-gesture-handler';
 import avt from '../../Assets/Images/profile/dummyImg.png';
-import {ActivityIndicator, Avatar} from 'react-native-paper';
-import {List} from 'react-native-paper';
+import { ActivityIndicator, Avatar } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Header from '../../Components/ReusableComponent/Header';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MiniHeader from '../../Components/MiniHeader';
-import {getDraftStories} from '../../Store/Reducers/DraftStoriesReducer';
+import { getDraftStories } from '../../Store/Reducers/DraftStoriesReducer';
 import base64 from 'react-native-base64';
 import Modal from 'react-native-modal';
 import SearchableDropDown from 'react-native-searchable-dropdown';
 import ButtonComp from '../../Components/ReusableComponent/Button';
-import {HEIGHT, WIDTH} from '../../utils/globelVariables';
-import {postRequest} from '../../utils/fetch';
-import {GetCoin} from '../../Store/Reducers/CoinReducer';
-import {showMessage} from 'react-native-flash-message';
+import { HEIGHT, WIDTH } from '../../utils/globelVariables';
+import { postRequest } from '../../utils/fetch';
+import { GetCoin } from '../../Store/Reducers/CoinReducer';
+import { showMessage } from 'react-native-flash-message';
 import Loader from '../../Components/ReusableComponent/Loader';
 import SaveStoriesCard from '../../Components/SaveStoriesCard';
-import {getBookmarkStories} from '../../Store/Reducers/BookmarkStoriesReducer';
-import {getStoriesList} from '../../Store/Reducers/StoriesReducer';
+import { getBookmarkStories } from '../../Store/Reducers/BookmarkStoriesReducer';
+import { getStoriesList } from '../../Store/Reducers/StoriesReducer';
 import MainHeader from '../../Components/MainHeader';
 import Input from '../../Components/ReusableComponent/Input';
 import DropdownComponent from '../../Components/ReusableComponent/Dropdown';
-import {getRequestWithOutBody, postRequestWithToken} from '../../App/fetch';
-import {BASE_URL} from '../../App/api';
-import {MyUserStoriesUpdateLocally} from '../../Store/Reducers/UserStoriesReducer';
+import { getRequestWithOutBody, postRequestWithToken } from '../../App/fetch';
+import { BASE_URL } from '../../App/api';
+import { MyUserStoriesUpdateLocally } from '../../Store/Reducers/UserStoriesReducer';
 
 const WriterDraft = () => {
   const richText = useRef();
@@ -79,6 +79,7 @@ const WriterDraft = () => {
   const AuthReducer = useSelector(state => state.AuthReducer);
   // const {userAuth, DraftStories, leagues, isDark, BookmarkStoriesList} =
   //   useSelector(state => state);
+  console.log('AuthReducer:', AuthReducer?.userData?.user?.profile);
   console.log('BookmarkStoriesList:', BookmarkStoriesList);
   const isFocus = useIsFocused();
   const [date, setDate] = useState(null);
@@ -104,8 +105,8 @@ const WriterDraft = () => {
   console.log('arrayDraft:', arrayDraft);
   console.log('arrayDraft:', arrayDraft.length);
   const getStoriesData = () => {
-    dispatch(getDraftStories({userid: userAuth?.userData?.userId}));
-    dispatch(getBookmarkStories({userid: userAuth?.userData?.userId}));
+    dispatch(getDraftStories({ userid: userAuth?.userData?.userId }));
+    dispatch(getBookmarkStories({ userid: userAuth?.userData?.userId }));
 
     console.log(
       'BookmarkStoriesList?.BookmarkStories',
@@ -229,41 +230,47 @@ const WriterDraft = () => {
     const isValid = validateFields(title, descHTML);
     console.log('isValid: ', isValid);
 
-    var formdata = new FormData();
-    formdata.append('title', title);
-    formdata.append('content', descHTML);
-    formdata.append('league', SingleLeague.id);
-    setLoader(true);
-    postRequestWithToken(
-      `${BASE_URL}/stories/add-story/`,
-      formdata,
-      AuthReducer.userData.token,
-    )
-      .then(result => {
-        setLoader(false);
-        console.log('result on home', result);
-        getRequestWithOutBody(
-          `${BASE_URL}/stories/user-stories/`,
-          AuthReducer.userData.token,
-        )
-          .then(result => {
-            setLoader(false);
-            // console.log('result on home', result);
-            setUserStories(result);
-            dispatch(MyUserStoriesUpdateLocally(result));
-            navigation.navigate('Stories');
-          })
-          .catch(error => {
-            setloader(false);
-            console.log('errorbbbbb', error);
-          });
-        // setLeagueStories(result);
-        // dispatch(SingleLeagueUpdateLocally(result));
-      })
-      .catch(error => {
-        // setloader(false);
-        console.log('errorbbbbb', error);
-      });
+    if (isValid) {
+      var formdata = new FormData();
+      formdata.append('title', title);
+      formdata.append('content', descHTML);
+      formdata.append('league', SingleLeague.id);
+      setLoader(true);
+      postRequestWithToken(
+        `${BASE_URL}/stories/add-story/`,
+        formdata,
+        AuthReducer.userData.token,
+      )
+        .then(result => {
+          // setLoader(false);
+          console.log('result on home', result);
+          getRequestWithOutBody(
+            `${BASE_URL}/stories/user-stories/`,
+            AuthReducer.userData.token,
+          )
+            .then(result => {
+              // console.log('result on home', result);
+              setTitle('')
+              setUserStories(result);
+              dispatch(MyUserStoriesUpdateLocally(result));
+              navigation.navigate('Stories');
+              setLoader(false);
+            })
+            .catch(error => {
+              setLoader(false);
+              console.log('errorbbbbb 11', error);
+            });
+          // setLeagueStories(result);
+          // dispatch(SingleLeagueUpdateLocally(result));
+        })
+        .catch(error => {
+          // setloader(false);
+          console.log('errorbbbbb 12', error);
+        });
+    } else {
+      // Handle the case when some fields are empty or invalid
+      // onChangeError('Invalid fields')
+    }
   };
 
   const EditData = (item, key) => {
@@ -398,7 +405,7 @@ const WriterDraft = () => {
   //   );
   // };
 
-  const renderItem3 = ({item, index}) => {
+  const renderItem3 = ({ item, index }) => {
     return (
       <>
         <View
@@ -430,7 +437,7 @@ const WriterDraft = () => {
           <ImageBackground
             source={require('../../Assets/Images/newimages/bgImg2.png')}
             resizeMode="cover"
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <View
               style={{
                 justifyContent: 'center',
@@ -442,13 +449,13 @@ const WriterDraft = () => {
           </ImageBackground>
         </>
       ) : (
-        <View style={{flex: 1, paddingBottom: '20%'}}>
+        <View style={{ flex: 1, paddingBottom: '20%' }}>
           <MainHeader title={'Draft'} />
 
           <ScrollView
             alwaysBounceVertical={true}
             keyboardShouldPersistTaps="always">
-            <SafeAreaView edges={['bottom', 'left', 'right']} style={{flex: 1}}>
+            <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
               <View>
                 <Heading
                   mt={'7%'}
@@ -483,14 +490,20 @@ const WriterDraft = () => {
                       marginBottom: 15,
                     }}>
                     <Image
-                      source={require('../../Assets/Images/newimages/profile2.png')}
+                      // source={require('../../Assets/Images/newimages/profile2.png')}
+                      source={{
+                        uri: `https://shareitstoryapp.com${AuthReducer?.userData?.user?.profile?.profile_pic}`,
+                      }}
                       // source={{ uri: 'http://23.26.137.178/media/media/john.png'}}
                       style={{
-                        width: 32,
-                        height: 32,
+                        width: 40,
+                        height: 40,
                         alignContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center',
+                        borderColor: '#7D7D7D',
+                  borderWidth: 2,
+                  borderRadius: 55,
                         // marginLeft: 20,
                         // marginRight: 10,
                       }}
@@ -502,7 +515,7 @@ const WriterDraft = () => {
                         marginHorizontal: '5%',
                       }}>
                       <InteractParagraph
-                        p={'asdasdsd'}
+                        p={AuthReducer?.userData?.user?.profile?.first_name + ' ' + AuthReducer?.userData?.user?.profile?.last_name}
                         colors={'#D5D5D5'}
                         Fontsize={16}
                         fw={'bold'}
@@ -517,7 +530,7 @@ const WriterDraft = () => {
                   </View>
                 </View>
 
-                <View style={{marginTop: 5}}>
+                <View style={{ marginTop: 5 }}>
                   <Heading
                     // mt={'5%'}
                     ml={5}
@@ -558,7 +571,9 @@ const WriterDraft = () => {
                       fontSize: 13,
                       marginTop: 10,
                       marginBottom: 15,
-                      padding: 10,
+                      // padding: 10,
+                      paddingVertical: 10,
+                      paddingHorizontal: 2,
                       marginLeft: 5,
                     }}
                     placeholder={'Title'}
@@ -568,7 +583,7 @@ const WriterDraft = () => {
                   />
                 </View>
 
-                <View style={{marginLeft: 10}}>
+                <View style={{ marginLeft: 10 }}>
                   {/* {errorTitle && (
                     <Text style={styles.errorTextStyle}>
                       Please Enter Title
@@ -581,7 +596,7 @@ const WriterDraft = () => {
 
                 <View style={styles.richTextContainer}>
                   <KeyboardAvoidingView
-                    style={{flex: 1}}
+                    style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : null}
                     keyboardVerticalOffset={65}>
                     <RichEditor
@@ -642,7 +657,7 @@ const WriterDraft = () => {
                   </Text>
                 )}
               </View> */}
-              <View style={{marginLeft: 30}}>
+              <View style={{ marginLeft: 30 }}>
                 {/* {errorTitle && (
                     <Text style={styles.errorTextStyle}>
                       Please Enter Title
@@ -960,7 +975,7 @@ const WriterDraft = () => {
                   </SafeAreaView>
                 </Modal> */}
               <Modal isVisible={isLoadingModalVisible}>
-                <SafeAreaView style={{flex: 1}}>
+                <SafeAreaView style={{ flex: 1 }}>
                   <View
                     style={{
                       flex: 1,
@@ -969,7 +984,7 @@ const WriterDraft = () => {
                       marginTop: 50,
                     }}>
                     <ActivityIndicator size={40} color={COLORS.primary} />
-                    <Text style={{color: COLORS.primary}}>Loading....</Text>
+                    <Text style={{ color: COLORS.primary }}>Loading....</Text>
                   </View>
                 </SafeAreaView>
               </Modal>

@@ -71,13 +71,13 @@ export const ModalView = props => {
             }}>
             <Heading
               Heading={txt}
-              Fontsize={15}
+              Fontsize={17}
               //   color={COLORS.dark}
               //   Fontweight={'bold'}
               txtAlign={'center'}
               color={'#FFFFFF'}
             />
-            <Pressable onPress={cross}>
+            <Pressable onPress={cross} style={{justifyContent: 'center'}}>
               <Image source={require('../../Assets/Images/crossmodal.png')} />
             </Pressable>
           </View>
@@ -92,13 +92,13 @@ export const ModalView = props => {
                   borderWidth: 1,
                   borderRadius: 15,
                   backgroundColor: '#565B68',
-                  padding: 7,
+                  padding: 9,
                   marginRight: 6,
                   marginTop: 6,
                 }}>
                 <Heading
                   Heading={txt}
-                  Fontsize={9}
+                  Fontsize={10}
                   //   color={COLORS.dark}
                   //   Fontweight={'bold'}
                   //   txtAlign={'center'}
@@ -126,7 +126,7 @@ export const ModalView = props => {
               backgroundColor: '#565B68',
               borderRadius: 10,
               height: 70,
-              marginTop: 12,
+              marginTop: 15,
               padding: 5,
             }}>
             <TextInput
@@ -138,7 +138,7 @@ export const ModalView = props => {
                 backgroundColor: 'transparent',
                 marginBottom: -3,
                 marginLeft: 3,
-                fontSize: 10,
+                fontSize: 12,
                 height: 60,
 
                 // marginTop: -45,
@@ -163,12 +163,12 @@ export const ModalView = props => {
                     {like ? (
                       <Image
                         source={require('../../Assets/Images/likefill.png')}
-                        style={{width: 12, height: 12}}
+                        style={{width: 14, height: 14}}
                       />
                     ) : (
                       <Image
                         source={require('../../Assets/Images/likeoutline.png')}
-                        style={{width: 12, height: 12}}
+                        style={{width: 14, height: 14}}
                       />
                     )}
                   </View>
@@ -184,7 +184,7 @@ export const ModalView = props => {
                     onFinishRating={rating => {
                       setRating(rating);
                     }}
-                    imageSize={10}
+                    imageSize={13}
                     ratingColor={'#FFC700'}
                     ratingBackgroundColor={'#707687'}
                     tintColor={'#373B44'}
@@ -206,7 +206,7 @@ export const ModalView = props => {
                   }}
                   style={{
                     width: 60,
-                    height: 20,
+                    height: 25,
                     backgroundColor: '#7ACCCA',
                     // borderWidth: 1,
                     // borderColor: '#FFFFFF',
@@ -220,7 +220,7 @@ export const ModalView = props => {
                   }}>
                   <Text
                     style={{
-                      fontSize: 8,
+                      fontSize: 10,
                       fontWeight: 600,
                       color: '#373B44',
                     }}>
@@ -241,7 +241,7 @@ export const ModalView = props => {
                 }}
                 style={{
                   width: 60,
-                  height: 20,
+                  height: 25,
                   backgroundColor: '#7ACCCA',
                   // borderWidth: 1,
                   // borderColor: '#FFFFFF',
@@ -255,7 +255,7 @@ export const ModalView = props => {
                 }}>
                 <Text
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     fontWeight: 600,
                     color: '#373B44',
                   }}>

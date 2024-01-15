@@ -24,6 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export const PasswordChange = ({route}) => {
   const [passHide, setPassHide] = useState(false);
@@ -156,33 +157,23 @@ export const PasswordChange = ({route}) => {
                       marginTop: Platform.OS === 'ios' ? '18%' : 30,
                     }}>
                     <View
-                      style={{
-                        alignSelf: 'center',
-                        backgroundColor: '#ffffff',
-                        borderRadius: 10,
+                    style={{
+                      flexDirection: 'row',
+                      // marginHorizontal: '8%',
+                      // marginTop: Platform.OS === 'ios' ? '12%' : 10,
+                      // marginBottom: Platform.OS === 'ios' ? '8%' : '8%',
+                    }}>
+                    <Pressable
+                      onPress={() => {
+                        Navigation.goBack();
                       }}>
-                      <Pressable
-                        onPress={() => {
-                          Navigation.goBack();
-                        }}>
-                        {/* <Image
-                        source={require('../../Assets/Images/back.png')}
-                        style={{
-                          width: 30,
-                          height: 30,
-                          alignContent: 'center',
-                          alignItems: 'center',
-                          alignSelf: 'center',
-                        }}
-                      /> */}
-
-                        <Ionicons
-                          name="chevron-back"
-                          size={30}
-                          color={'black'}
-                        />
-                      </Pressable>
-                    </View>
+                      <AntDesign
+                        name={'leftcircle'}
+                        size={30}
+                        color={'#ffffff'}
+                      />
+                    </Pressable>
+                  </View>
                   </View>
                   <View
                     style={{
@@ -287,8 +278,8 @@ export const PasswordChange = ({route}) => {
                         }}
                         style={{
                           flex: 1,
-                          width: '90%',
-                          marginHorizontal: '5%',
+                          width: '76%',
+                          marginHorizontal: '12%',
                           height: 50,
                           backgroundColor: '#7ACCCA',
                           // borderWidth: 1,

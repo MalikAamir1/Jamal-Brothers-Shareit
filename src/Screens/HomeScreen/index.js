@@ -200,7 +200,7 @@ const Header = () => {
     )
       .then(result => {
         // setLoading(false);
-        // console.log('result on home', result);
+        console.log('result on home 1', result);
         setLeagueStories(result);
         dispatch(SingleLeagueUpdateLocally(result));
         getRequestWithOutBody(
@@ -209,18 +209,18 @@ const Header = () => {
         )
           .then(result => {
             // setloader(false);
-            // console.log('result on home', result);
+            console.log('result on home 2', result);
             setUserStories(result);
             dispatch(MyUserStoriesUpdateLocally(result));
           })
           .catch(error => {
             // setloader(false);
-            console.log('errorbbbbb', error);
+            console.log('errorbbbbb 7', error);
           });
       })
       .catch(error => {
         // setloader(false);
-        console.log('errorbbbbb', error);
+        console.log('errorbbbbb 8', error);
       });
   }
 
@@ -233,6 +233,7 @@ const Header = () => {
         .then(res => {
           setLoading(false);
           // console.log('stories by league', res);
+          let data = res?.results?.sort((a, b) => b.likes_sum - a.likes_sum);
           setAllLeagueStories(res);
           dispatch(updateStoriesList(res));
           // dispatch(SingleLeagueUpdateLocally(result));
@@ -290,7 +291,8 @@ const Header = () => {
             borderRadius: 22,
             marginHorizontal: '4%',
             marginTop: 20,
-
+            flexDirection: 'column',
+            justifyContent: 'space-between'
           }}>
           <View style={{flexDirection: 'row', marginTop: 15}}>
             <View>
@@ -323,7 +325,7 @@ const Header = () => {
                   <Image
                     // source={require('../../Assets/Images/newimages/profile2.png')}
                     source={{
-                      uri: `http://23.26.137.178${item.user.profile_pic}`,
+                      uri: `https://shareitstoryapp.com${item.user.profile_pic}`,
                     }}
                     style={{
                       width: 29,
@@ -344,7 +346,7 @@ const Header = () => {
                 Stylefont={'normal'}
                 Fontweight={'400'}
                 Fontsize={17}
-                Heading={item.user.first_name + ' ' + item.user.last_name}
+                Heading={item.user.first_name == '-' ? item.user.display_name : item.user.first_name + ' ' + item.user.last_name}
                 Color={'#FFFFFF'}
               />
               <View style={{width: 237}}>
@@ -386,7 +388,8 @@ const Header = () => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 15,
+              // marginTop: 15,
+              bottom: 15,
               justifyContent: 'space-between',
             }}>
             <View>

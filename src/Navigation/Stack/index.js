@@ -181,7 +181,7 @@ export default function Navigation() {
         </ScrollView>
       </SafeArea>
     );
-  // console.log(userData.userId, 'userData')
+  console.log(userData , 'userData')
   return (
     <NavigationContainer>
       <Stack.Navigator

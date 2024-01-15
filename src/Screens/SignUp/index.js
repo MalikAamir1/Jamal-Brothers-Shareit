@@ -326,8 +326,8 @@ export const SignUp = () => {
                           }}
                           style={{
                             flex: 1,
-                            width: '90%',
-                            marginHorizontal: '5%',
+                            width: '76%',
+                            marginHorizontal: '12%',
                             height: 50,
                             backgroundColor: '#7ACCCA',
                             // borderWidth: 1,
@@ -346,7 +346,7 @@ export const SignUp = () => {
                               fontWeight: 'bold',
                               color: '#373B44',
                             }}>
-                            Login
+                            Sign Up
                           </Text>
                         </TouchableOpacity>
                       </View>

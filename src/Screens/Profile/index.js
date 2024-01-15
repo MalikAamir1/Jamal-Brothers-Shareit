@@ -100,9 +100,11 @@ const Profile = () => {
           <View style={{ alignContent: 'center', alignSelf: 'center' }}>
             <Image
               source={{
-                uri: `http://23.26.137.178${AuthReducer?.userData?.user?.profile?.profile_pic}`,
+                uri: `https://shareitstoryapp.com${AuthReducer?.userData?.user?.profile?.profile_pic}`,
               }}
-              style={{ width: 120, height: 120, borderRadius: 80, marginTop: '5%' }}
+              style={{ width: 120, height: 120, borderWidth: 4,
+                borderColor: '#7D7D7D',
+                borderRadius: 75, marginTop: '5%' }}
             />
           </View>
           <View
@@ -113,11 +115,23 @@ const Profile = () => {
             }}>
             <View style={{ marginVertical: '4%' }}>
               <Input
-                title={'Full Name'}
+                title={'First Name'}
                 urlImg={require('../../Assets/Images/nameprofile.png')}
                 // placeholder={'Enter your name'}
                 disabled={true}
-                value={AuthReducer?.userData?.user?.profile?.display_name}
+                value={AuthReducer?.userData?.user?.profile?.first_name}
+                // value={dataFromOtpScreenOfSignUp.email}
+                // onChangeText={onChangeFullName}
+              />
+            </View>
+
+            <View style={{ marginVertical: '4%' }}>
+              <Input
+                title={'Last Name'}
+                urlImg={require('../../Assets/Images/nameprofile.png')}
+                // placeholder={'Enter your name'}
+                disabled={true}
+                value={AuthReducer?.userData?.user?.profile?.last_name}
                 // value={dataFromOtpScreenOfSignUp.email}
                 // onChangeText={onChangeFullName}
               />

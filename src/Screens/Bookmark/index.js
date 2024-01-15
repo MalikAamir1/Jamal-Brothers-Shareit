@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import MainHeader from '../../Components/MainHeader';
-import RatingStars from '../../Components/RatingStars';
 import Heading from '../../Components/ReusableComponent/Heading';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
 import HTMLView from 'react-native-htmlview';
@@ -9,8 +8,15 @@ import {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
 import { getRequestWithOutBody } from '../../App/fetch';
 import { BASE_URL } from '../../App/api';
+import {
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
-const {View, Image, Text, StyleSheet, RefreshControl} = require('react-native');
+// const {View, Image, Text, StyleSheet, RefreshControl} = require('react-native');
 
 
 
@@ -34,9 +40,10 @@ const Bookmark = () => {
         setBookmarks(result)
       })
       .catch(error => {
-        setloader(false);
-        console.log('errorbbbbb', error);
-      });
+        setLoading(false);
+        console.log('errorbbbbb 1', error);
+    });
+    
   }
 
   useEffect(() => {
@@ -46,42 +53,42 @@ const Bookmark = () => {
 
   const ListEmptyComponent = () => {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          marginTop: 20,
-          width: '92%',
-          height: 129,
-          backgroundColor: '#404652',
-          borderRadius: 22,
-          marginHorizontal: '4%',
-          padding: 10,
-        }}>
-        <Image
-          source={require('../../Assets/Images/newimages/sadface.png')}
-          style={{
-            height: 44,
-            width: 33,
-            alignContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-            marginRight: 6,
-            marginTop: 20
-          }}
-        />
-        <Heading
-          mt={10}
-          // Stylefont={'normal'}
-          Fontweight={500}
-          Fontsize={12}
-          Heading={'No Bookmark Story'}
-          Color={'#FFFFFF'}
-          // mb={7}
-        />
-      
-      </View>
+        <View
+            style={{
+                alignItems: 'center',
+                marginTop: 20,
+                width: '92%',
+                height: 129,
+                backgroundColor: '#404652',
+                borderRadius: 22,
+                marginHorizontal: '4%',
+                padding: 10,
+            }}>
+            <Image
+                source={require('../../Assets/Images/newimages/sadface.png')}
+                style={{
+                    height: 44,
+                    width: 33,
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    marginRight: 6,
+                    marginTop: 20
+                }}
+            />
+            <Heading
+                mt={10}
+                // Stylefont={'normal'}
+                Fontweight={500}
+                Fontsize={12}
+                Heading={'No Bookmark Story'}
+                Color={'#FFFFFF'}
+                // mb={7}
+            />
+        </View>
     );
-  };
+};
+
 
   const renderItem = ({item, index}) => {
     const formattedDate = new Intl.DateTimeFormat('en', {
@@ -124,13 +131,13 @@ const Bookmark = () => {
                 Heading={'Date: ' + formattedDate}
                 Color={'#AAAAAA'}
               />
-              <View style={{minWidth: 327}}>
+              <View style={{minWidth: 250}}>
                 <Text style={{marginTop: 8,}}>
                   <HTMLView
                     stylesheet={stylesshow}
                     value={`<div style="color:green">${item.story.content.slice(
                       0,
-                      50,
+                      30,
                     )}...<a href='bookmarkStory'>Read more</a></div>`}
                     onLinkPress={url => {
                       // Handle the link press here

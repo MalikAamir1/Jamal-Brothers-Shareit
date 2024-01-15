@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 // import { View, Image, ScrollView, FlatList, Pressable } from 'react-native';
 // import React from 'react';
 import {
@@ -11,6 +11,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -21,20 +22,20 @@ import COLORS from '../../Assets/Style/Color';
 import styles from './style';
 import InteractAvatar from '../../Components/ReusableComponent/Avatar';
 import AvatarImage from '../../Assets/Images/AvtarImages/avt.png';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Header from '../../Components/ReusableComponent/Header';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MiniHeader from '../../Components/MiniHeader';
 import MainHeader from '../../Components/MainHeader';
 import Heading from '../../Components/ReusableComponent/Heading';
 import RatingStars from '../../Components/RatingStars';
 import HTMLView from 'react-native-htmlview';
-import {Loader} from '../../Components/ReusableComponent/Loader';
-import {BASE_URL} from '../../App/api';
-import {getRequestWithOutBody} from '../../App/fetch';
-import {MyUserStoriesUpdateLocally} from '../../Store/Reducers/UserStoriesReducer';
-import {RefreshControl} from 'react-native-gesture-handler';
+import { Loader } from '../../Components/ReusableComponent/Loader';
+import { BASE_URL } from '../../App/api';
+import { getRequestWithOutBody } from '../../App/fetch';
+import { MyUserStoriesUpdateLocally } from '../../Store/Reducers/UserStoriesReducer';
+import { RefreshControl } from 'react-native-gesture-handler';
 import Navigation from '../../Navigation/Stack';
 
 export default function Contestprizes() {
@@ -64,7 +65,7 @@ export default function Contestprizes() {
       })
       .catch(error => {
         // setloader(false);
-        console.log('errorbbbbb', error);
+        console.log('errorbbbbb 2', error);
       });
   }
 
@@ -96,13 +97,13 @@ export default function Contestprizes() {
 
   const isDark = useSelector(state => state.isDark);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     const formattedDate = new Intl.DateTimeFormat('en', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     }).format(new Date(item.updated));
-    console.log('item in MY STORIES PUBLISH PORTION: ', item);
+    // console.log('item in MY STORIES PUBLISH PORTION: ', item);
     return (
       <>
         <View
@@ -113,12 +114,18 @@ export default function Contestprizes() {
             borderRadius: 22,
             marginHorizontal: '4%',
             marginTop: 20,
-            padding: 10,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 2}}>
-            <View style={{marginLeft: 5}}>
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}
+        >
+          <View
+            style={{
+              marginTop: 2,
+              padding: 10,
+            }}
+          >
+            <View style={{ marginLeft: 5 }}>
               <Heading
-                // ml={45}
                 Stylefont={'normal'}
                 Fontweight={'400'}
                 Fontsize={15.65}
@@ -127,18 +134,20 @@ export default function Contestprizes() {
               />
               <Heading
                 mt={2}
-                // ml={45}
                 Stylefont={'normal'}
                 Fontweight={'400'}
                 Fontsize={9}
                 Heading={'Date: ' + formattedDate}
                 Color={'#AAAAAA'}
               />
-              <View style={{minWidth: 327}}>
-                <Text style={{marginTop: 8}}>
+              <View style={{ minWidth: 327 }}>
+                <Text style={{ marginTop: 8 }}>
                   <HTMLView
                     stylesheet={stylesshow}
-                    value={`<div style="color:green">${item.content}</div>`}
+                    value={`<div style="color:green">${item.content.slice(
+                      0,
+                      40,
+                    )}...`}
                     onLinkPress={url => {
                       // Handle the link press here
                       if (url === 'title8') {
@@ -154,73 +163,60 @@ export default function Contestprizes() {
           </View>
           <View
             style={{
-              position: 'absolute',
-              bottom: 10,
-              // marginBottom: -6,
-            }}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row', marginLeft: 18}}>
-                  <Image
-                    source={require('../../Assets/Images/newimages/like.png')}
-                    style={{
-                      width: 13.89,
-                      height: 14.31,
-                      alignContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      marginRight: 6,
-                    }}
-                  />
-                  <Heading
-                    // mt={0}
-                    // ml={45}
-                    Stylefont={'normal'}
-                    Fontweight={'400'}
-                    Fontsize={11.11}
-                    Heading={item.likes}
-                    Color={'#7ACCCA'}
-                  />
-                </View>
-                <View style={{flexDirection: 'row', marginLeft: 16}}>
-                  <Image
-                    source={require('../../Assets/Images/newimages/eye.png')}
-                    style={{
-                      // height: 17.78,
-                      // width: 16.67,
-                      alignContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      marginRight: 6,
-                    }}
-                  />
-                  <Heading
-                    // mt={0}
-                    // ml={45}
-                    Stylefont={'normal'}
-                    Fontweight={'400'}
-                    Fontsize={11.11}
-                    Heading={item.views}
-                    Color={'#7ACCCA'}
-                  />
-                </View>
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 15,
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginLeft: 18 }}>
+                <Image
+                  source={require('../../Assets/Images/newimages/like.png')}
+                  style={{
+                    width: 13.89,
+                    height: 14.31,
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    marginRight: 6,
+                  }}
+                />
+                <Heading
+                  Stylefont={'normal'}
+                  Fontweight={'400'}
+                  Fontsize={11.11}
+                  Heading={item.likes}
+                  Color={'#7ACCCA'}
+                />
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginRight: -6,
-                  left: 145,
-                }}>
-                <RatingStars rating={item.rating} />
+              <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+                <Image
+                  source={require('../../Assets/Images/newimages/eye.png')}
+                  style={{
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    marginRight: 6,
+                  }}
+                />
+                <Heading
+                  Stylefont={'normal'}
+                  Fontweight={'400'}
+                  Fontsize={11.11}
+                  Heading={item.views}
+                  Color={'#7ACCCA'}
+                />
               </View>
+            </View>
+            <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <RatingStars rating={item.rating} />
             </View>
           </View>
         </View>
       </>
     );
   };
+
   const ListEmptyComponent = () => {
     return (
       <View
@@ -252,7 +248,7 @@ export default function Contestprizes() {
           Fontsize={12}
           Heading={'No Story'}
           Color={'#FFFFFF'}
-          // mb={7}
+        // mb={7}
         />
         <Heading
           mt={2}
@@ -261,7 +257,7 @@ export default function Contestprizes() {
           Fontsize={10}
           Heading={'Start writing your stories'}
           Color={'#AAAAAA'}
-          // mb={7}
+        // mb={7}
         />
         <TouchableOpacity
           // onPress={toggleModal}
@@ -290,7 +286,7 @@ export default function Contestprizes() {
     );
   };
 
-  const renderItem2 = ({item, index}) => {
+  const renderItem2 = ({ item, index }) => {
     const formattedDate = new Intl.DateTimeFormat('en', {
       day: 'numeric',
       month: 'long',
@@ -308,8 +304,8 @@ export default function Contestprizes() {
             marginTop: 20,
             padding: 10,
           }}>
-          <View style={{flexDirection: 'row', marginTop: 2}}>
-            <View style={{marginLeft: 5}}>
+          <View style={{ flexDirection: 'row', marginTop: 2 }}>
+            <View style={{ marginLeft: 5 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -334,40 +330,51 @@ export default function Contestprizes() {
                     Color={'#AAAAAA'}
                   />
                 </View>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('editStory', {storyData: item});
+                <View
+                  style={{
+                    position: 'absolute',
+                    // top: 0,
+                    right: Platform.OS === 'ios' ? 0 : 20,
+                    // bottom: 0,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                  <View>
-                    <Image
-                      source={require('../../Assets/Images/newimages/editDraft.png')}
-                      style={{
-                        width: 18,
-                        height: 18,
-                        alignContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                        marginLeft: -20,
-                      }}
-                    />
-                  </View>
-                </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('editStory', { storyData: item });
+                    }}>
+                    <View>
+                      <Image
+                        source={require('../../Assets/Images/newimages/editDraft.png')}
+                        style={{
+                          width: 18,
+                          height: 18,
+                          alignContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          // marginLeft: 'auto',
+                          // marginRight: 20
+                        }}
+                      />
+                    </View>
+                  </Pressable>
+                </View>
               </View>
-              <View style={{minWidth: 327}}>
-                <Text style={{marginTop: 12}}>
+              <View style={{ minWidth: 327 }}>
+                <Text style={{ marginTop: 12 }}>
                   <HTMLView
                     stylesheet={stylesshow}
                     value={`<div style="color:green">${item.content.slice(
                       0,
-                      200,
-                    )}...<a href='title8'>Read more</a></div>`}
+                      30,
+                    )}...`}
                     onLinkPress={url => {
                       // Handle the link press here
                       if (url === 'title8') {
                         // Navigate to the desired screen
                         // navigation.navigate('title8');
                         // console.log('log');
-                        navigation.navigate('editStory', {storyData: item});
+                        navigation.navigate('editStory', { storyData: item });
                       }
                     }}
                   />
@@ -391,7 +398,7 @@ export default function Contestprizes() {
           Fontsize={25}
           Heading={'Publish Stories:'}
           Color={'#FFFFFF'}
-          // mb={7}
+        // mb={7}
         />
       </>
     );
@@ -408,7 +415,7 @@ export default function Contestprizes() {
           Fontsize={25}
           Heading={'Draft Stories :'}
           Color={'#FFFFFF'}
-          // mb={7}
+        // mb={7}
         />
       </>
     );
@@ -416,7 +423,7 @@ export default function Contestprizes() {
   const ListFooterComponent = () => {
     return (
       <>
-        <View style={{marginTop: 30}}>
+        <View style={{ marginTop: 30 }}>
           <FlatList
             data={draftStories}
             ListHeaderComponent={ListHeaderComponent2}
@@ -435,7 +442,7 @@ export default function Contestprizes() {
       {loading ? (
         <Loader />
       ) : (
-        <View style={{flex: 1, marginTop: 10, marginBottom: 70}}>
+        <View style={{ flex: 1, marginTop: 10, marginBottom: 70 }}>
           {/* head section */}
           {/* body section */}
           {/* <ScrollView showsVerticalScrollIndicator={false}> */}

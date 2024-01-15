@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -13,32 +13,33 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {ActivityIndicator, Button, Text} from 'react-native-paper';
+import { ActivityIndicator, Button, Text } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Heading from '../../Components/ReusableComponent/Heading';
 import COLORS from '../../Assets/Style/Color';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ButtonComp from '../../Components/ReusableComponent/Button';
-import {BASE_URL} from '../../App/api';
+import { BASE_URL } from '../../App/api';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 // import {
 //   getDataFromAsync,
 //   setDataToAsync,
 // } from '../../Utils/getAndSetAsyncStorage';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import {userDataFromAsyncStorage} from '../../Store/Reducers/AuthReducer';
-import {postRequest} from '../../App/fetch';
-import {Loader} from '../../Components/ReusableComponent/Loader';
+import { userDataFromAsyncStorage } from '../../Store/Reducers/AuthReducer';
+import { postRequest } from '../../App/fetch';
+import { Loader } from '../../Components/ReusableComponent/Loader';
 import TimerCircle from '../../Components/ReusableComponent/OtpTimer';
-import {otpScreen} from '../../Store/Reducers/ScreenReducer.js';
-import {OtpInput} from '../../Components/Otp';
+import { otpScreen } from '../../Store/Reducers/ScreenReducer.js';
+import { OtpInput } from '../../Components/Otp';
 import {
   getDataFromAsync,
   setDataToAsync,
 } from '../../utils/getAndSetAsyncStorage';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
 
-export const OtpScreen = ({route}) => {
+export const OtpScreen = ({ route }) => {
   const Navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -169,41 +170,35 @@ export const OtpScreen = ({route}) => {
         {loading ? (
           <Loader />
         ) : (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <ImageBackground
               // source={require('../../Assets/Images/bgOtp.png')}
               resizeMode="cover"
-              style={{flex: 1}}>
-              <ScrollView style={{flex: 1, flexGrow: 1}}>
+              style={{ flex: 1 }}>
+              <ScrollView style={{ flex: 1, flexGrow: 1 }}>
                 {/* Header */}
-                <SafeAreaView style={{flex: 1}}>
+                <SafeAreaView style={{ flex: 1 }}>
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginHorizontal: 20,
-                      marginTop: Platform.OS === 'ios' ? 35 : 30,
+                      marginHorizontal: '8%',
+                      marginTop: Platform.OS === 'ios' ? '12%' : 10,
+                      marginBottom: Platform.OS === 'ios' ? '8%' : '8%',
                     }}>
-                    <View
-                      style={{
-                        alignSelf: 'center',
-                        backgroundColor: '#ffffff',
-                        borderRadius: 10,
+                    <Pressable
+                      onPress={() => {
+                        Navigation.goBack();
                       }}>
-                      <Pressable
-                        onPress={() => {
-                          Navigation.goBack();
-                        }}>
-                        <Ionicons
-                          name="chevron-back"
-                          size={30}
-                          color={'black'}
-                        />
-                      </Pressable>
-                    </View>
+                      <AntDesign
+                        name={'leftcircle'}
+                        size={30}
+                        color={'#ffffff'}
+                      />
+                    </Pressable>
                   </View>
 
                   {/* Center */}
-                  <View style={{marginTop: '0%', marginHorizontal: '15%'}}>
+                  <View style={{ marginTop: '0%', marginHorizontal: '15%' }}>
                     <Heading
                       Fontsize={30}
                       txtAlign={'center'}
@@ -260,8 +255,8 @@ export const OtpScreen = ({route}) => {
                       }}
                       style={{
                         flex: 1,
-                        width: '80%',
-                        marginHorizontal: '10%',
+                        width: '66%',
+                        marginHorizontal: '17%',
                         height: 50,
                         backgroundColor: '#7ACCCA',
                         // borderWidth: 1,
@@ -285,7 +280,7 @@ export const OtpScreen = ({route}) => {
                     </TouchableOpacity>
                   </View>
 
-                  <View style={{marginBottom: 80}}>
+                  <View style={{ marginBottom: 80 }}>
                     <TimerCircle seconds={seconds} setSeconds={setSeconds} />
                   </View>
 
@@ -305,7 +300,7 @@ export const OtpScreen = ({route}) => {
 
                     <Button
                       textColor={'black'}
-                      style={{marginLeft: -8}}
+                      style={{ marginLeft: -8 }}
                       onPress={() => ResendOtp()}>
                       <Text
                         style={{

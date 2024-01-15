@@ -1,23 +1,23 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {FlatList, Image, Pressable, Text, TextInput, View} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FlatList, Image, Pressable, Text, TextInput, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from '../../Assets/Style/Color';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import coins from '../../Assets/Images/Header/coins.png';
-import {ActivityIndicator} from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import styles from './style';
-import {useNavigation} from '@react-navigation/native';
-import {getRequest} from '../../utils/fetch';
-import {BASE_URL} from '../../utils/api';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { getRequest } from '../../utils/fetch';
+import { BASE_URL } from '../../utils/api';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ToastAndroid} from 'react-native';
-import {lime100} from 'react-native-paper/lib/typescript/styles/colors';
-import {RefreshControl} from 'react-native';
-import {GetLeagues} from '../../Store/Reducers/League';
-import {useSelector, useDispatch} from 'react-redux';
+import { ToastAndroid } from 'react-native';
+import { lime100 } from 'react-native-paper/lib/typescript/styles/colors';
+import { RefreshControl } from 'react-native';
+import { GetLeagues } from '../../Store/Reducers/League';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../Components/ReusableComponent/Loader';
 import NetInfo from '@react-native-community/netinfo';
 import ImageLoad from 'react-native-image-placeholder';
@@ -28,11 +28,11 @@ import MainHeader from '../../Components/MainHeader';
 import Heading from '../../Components/ReusableComponent/Heading';
 import RatingStars from '../../Components/RatingStars';
 import HTMLView from 'react-native-htmlview';
-import {showMessage} from 'react-native-flash-message';
-import {getRequestWithOutBody} from '../../App/fetch';
-import {SingleLeagueUpdateLocally} from '../../Store/Reducers/SingleLeagueReducer';
-import {MyUserStoriesUpdateLocally} from '../../Store/Reducers/UserStoriesReducer';
-import {updateStoriesList} from '../../Store/Reducers/StoriesReducer';
+import { showMessage } from 'react-native-flash-message';
+import { getRequestWithOutBody } from '../../App/fetch';
+import { SingleLeagueUpdateLocally } from '../../Store/Reducers/SingleLeagueReducer';
+import { MyUserStoriesUpdateLocally } from '../../Store/Reducers/UserStoriesReducer';
+import { updateStoriesList } from '../../Store/Reducers/StoriesReducer';
 
 const Search = () => {
   const AuthReducer = useSelector(state => state.AuthReducer);
@@ -62,6 +62,12 @@ const Search = () => {
     // Initial rendering, set the full list
     setFilteredStories(StoriesReducer || []);
   }, [StoriesReducer]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('')
+    }, []),
+  );
 
   //   GET API DATA
   // console.log('🚀 ~ file: index.js ~ line 40 ~ Search ~ leagues', leagues);
@@ -213,7 +219,7 @@ const Search = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}></View>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Text
               style={{
                 fontSize: 15,
@@ -340,7 +346,7 @@ const Search = () => {
   //   );
   // };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <>
       <View
         style={{
@@ -350,8 +356,10 @@ const Search = () => {
           borderRadius: 22,
           marginHorizontal: '4%',
           marginTop: 20,
+          flexDirection: 'column',
+          justifyContent: 'space-between'
         }}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
+        <View style={{ flexDirection: 'row', marginTop: 15 }}>
           <View>
             {item.user.profile_pic == '' ? (
               <Image
@@ -381,7 +389,7 @@ const Search = () => {
                 }}>
                 <Image
                   // source={require('../../Assets/Images/newimages/profile2.png')}
-                  source={{uri: `http://23.26.137.178${item.user.profile_pic}`}}
+                  source={{ uri: `https://shareitstoryapp.com${item.user.profile_pic}` }}
                   style={{
                     width: 29,
                     height: 29,
@@ -406,18 +414,18 @@ const Search = () => {
               }}> */}
             {/* </View> */}
           </View>
-          <View style={{marginLeft: 5}}>
+          <View style={{ marginLeft: 5 }}>
             <Heading
               mt={-2}
               // ml={45}
               Stylefont={'normal'}
               Fontweight={'400'}
               Fontsize={17}
-              Heading={item.user.first_name + ' ' + item.user.last_name}
+              Heading={item.user.first_name == '-' ? item.user.display_name : item.user.first_name + ' ' + item.user.last_name}
               Color={'#FFFFFF'}
             />
-            <View style={{width: 237}}>
-              <Text style={{marginTop: 8}}>
+            <View style={{ width: 237 }}>
+              <Text style={{ marginTop: 8 }}>
                 <HTMLView
                   stylesheet={styles}
                   value={`<div style="color:green">${item.content.slice(
@@ -455,12 +463,13 @@ const Search = () => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 15,
+            // marginTop: 15,
+            bottom: 15,
             justifyContent: 'space-between',
           }}>
           <View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flexDirection: 'row', marginLeft: 68}}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginLeft: 68 }}>
                 <Image
                   source={require('../../Assets/Images/newimages/like.png')}
                   style={{
@@ -482,7 +491,7 @@ const Search = () => {
                   Color={'#7ACCCA'}
                 />
               </View>
-              <View style={{flexDirection: 'row', marginLeft: 16}}>
+              <View style={{ flexDirection: 'row', marginLeft: 16 }}>
                 <Image
                   source={require('../../Assets/Images/newimages/eye.png')}
                   style={{
@@ -506,7 +515,7 @@ const Search = () => {
               </View>
             </View>
           </View>
-          <View style={{flexDirection: 'row', marginRight: 17}}>
+          <View style={{ flexDirection: 'row', marginRight: 17 }}>
             <RatingStars rating={item.rating} />
           </View>
         </View>
@@ -516,7 +525,7 @@ const Search = () => {
 
   return (
     <SafeArea>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <MainHeader title={'Search'} />
         <View
           style={{
@@ -558,7 +567,7 @@ const Search = () => {
           </View>
         </View>
         <FlatList
-          style={{marginBottom: 70}}
+          style={{ marginBottom: 70 }}
           data={filteredStories}
           // refreshControl={
           //   <RefreshControl
@@ -572,7 +581,7 @@ const Search = () => {
           // ListHeaderComponent={<ListHeaderComponent />}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          // stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
         />
 
         {/* </View> */}

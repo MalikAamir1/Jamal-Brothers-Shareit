@@ -267,8 +267,8 @@ export const ForgotPassword = () => {
                           }}
                           style={{
                             flex: 1,
-                            width: '94%',
-                            marginHorizontal: '3%',
+                            width: '76%',
+                            marginHorizontal: '12%',
                             height: 50,
                             backgroundColor: '#7ACCCA',
                             // borderWidth: 1,

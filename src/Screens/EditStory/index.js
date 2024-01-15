@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Image,
   Pressable,
@@ -23,30 +23,30 @@ import coins from '../../Assets/Images/Header/coins.png';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
 import Heading from '../../Components/ReusableComponent/Heading';
 import styles from '../WriterDraft/style';
-import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
-import {ScrollView, Swipeable} from 'react-native-gesture-handler';
+import { actions, RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import { ScrollView, Swipeable } from 'react-native-gesture-handler';
 import avt from '../../Assets/Images/profile/dummyImg.png';
-import {ActivityIndicator, Avatar} from 'react-native-paper';
-import {List} from 'react-native-paper';
+import { ActivityIndicator, Avatar } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Header from '../../Components/ReusableComponent/Header';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MiniHeader from '../../Components/MiniHeader';
-import {getDraftStories} from '../../Store/Reducers/DraftStoriesReducer';
+import { getDraftStories } from '../../Store/Reducers/DraftStoriesReducer';
 import base64 from 'react-native-base64';
 import Modal from 'react-native-modal';
 import SearchableDropDown from 'react-native-searchable-dropdown';
 import ButtonComp from '../../Components/ReusableComponent/Button';
-import {HEIGHT, WIDTH} from '../../utils/globelVariables';
-import {postRequest} from '../../utils/fetch';
-import {GetCoin} from '../../Store/Reducers/CoinReducer';
-import {showMessage} from 'react-native-flash-message';
+import { HEIGHT, WIDTH } from '../../utils/globelVariables';
+import { postRequest } from '../../utils/fetch';
+import { GetCoin } from '../../Store/Reducers/CoinReducer';
+import { showMessage } from 'react-native-flash-message';
 import Loader from '../../Components/ReusableComponent/Loader';
 import SaveStoriesCard from '../../Components/SaveStoriesCard';
-import {getBookmarkStories} from '../../Store/Reducers/BookmarkStoriesReducer';
-import {getStoriesList} from '../../Store/Reducers/StoriesReducer';
+import { getBookmarkStories } from '../../Store/Reducers/BookmarkStoriesReducer';
+import { getStoriesList } from '../../Store/Reducers/StoriesReducer';
 import MainHeader from '../../Components/MainHeader';
 import Input from '../../Components/ReusableComponent/Input';
 import DropdownComponent from '../../Components/ReusableComponent/Dropdown';
@@ -57,10 +57,10 @@ import {
   postRequestWithToken,
   putRequestWithToken,
 } from '../../App/fetch';
-import {BASE_URL} from '../../App/api';
-import {MyUserStoriesUpdateLocally} from '../../Store/Reducers/UserStoriesReducer';
+import { BASE_URL } from '../../App/api';
+import { MyUserStoriesUpdateLocally } from '../../Store/Reducers/UserStoriesReducer';
 
-const EditStory = ({route}) => {
+const EditStory = ({ route }) => {
   console.log('route.params', route.params);
   const dataFromParams = route.params;
   const richText = useRef();
@@ -196,46 +196,51 @@ const EditStory = ({route}) => {
     console.log('descHTML on editprofile', descHTML);
     console.log('story_ide', dataFromParams?.storyData?.id);
 
-    setLoading(true);
-    var formdata = new FormData();
-    formdata.append('title', title);
-    formdata.append('content', descHTML);
-    formdata.append('story_id', dataFromParams?.storyData?.id);
+    if (isValid) {
+      setLoading(true);
+      var formdata = new FormData();
+      formdata.append('title', title);
+      formdata.append('content', descHTML);
+      formdata.append('story_id', dataFromParams?.storyData?.id);
 
-    putRequestWithToken(
-      `${BASE_URL}/stories/update-story/`,
-      formdata,
-      AuthReducer.userData.token,
-    )
-      .then(result => {
-        // setLoading(false);
-        console.log('result on edit', result);
-        getRequestWithOutBody(
-          `${BASE_URL}/stories/user-stories/`,
-          AuthReducer.userData.token,
-        )
-          .then(result => {
-            setLoading(false);
-            // setloader(false);
-            // console.log('result on home', result);
-            setUserStories(result);
-            dispatch(MyUserStoriesUpdateLocally(result));
-            Navigation.goBack();
-          })
-          .catch(error => {
-            setLoading(false);
+      putRequestWithToken(
+        `${BASE_URL}/stories/update-story/`,
+        formdata,
+        AuthReducer.userData.token,
+      )
+        .then(result => {
+          // setLoading(false);
+          console.log('result on edit', result);
+          getRequestWithOutBody(
+            `${BASE_URL}/stories/user-stories/`,
+            AuthReducer.userData.token,
+          )
+            .then(result => {
+              setLoading(false);
+              // setloader(false);
+              // console.log('result on home', result);
+              setUserStories(result);
+              dispatch(MyUserStoriesUpdateLocally(result));
+              Navigation.goBack();
+            })
+            .catch(error => {
+              setLoading(false);
 
-            // setloader(false);
-            console.log('errorbbbbbaaaa', error);
-          });
-        // setLeagueStories(result);
-        // dispatch(SingleLeagueUpdateLocally(result));
-      })
-      .catch(error => {
-        setLoading(false);
-        // setloader(false);
-        console.log('errorbbbbb', error);
-      });
+              // setloader(false);
+              console.log('errorbbbbbaaaa', error);
+            });
+          // setLeagueStories(result);
+          // dispatch(SingleLeagueUpdateLocally(result));
+        })
+        .catch(error => {
+          setLoading(false);
+          // setloader(false);
+          console.log('errorbbbbb 3', error);
+        });
+    } else {
+      // Handle the case when some fields are empty or invalid
+      // onChangeError('Invalid fields')
+    }
   };
 
   const deleteStory = () => {
@@ -255,7 +260,7 @@ const EditStory = ({route}) => {
       })
       .catch(error => {
         setLoading(false);
-        console.log('errorbbbbb', error);
+        console.log('errorbbbbb 4', error);
         Navigation.goBack();
       });
   };
@@ -296,13 +301,13 @@ const EditStory = ({route}) => {
           })
           .catch(error => {
             setLoading(false);
-            console.log('errorbbbbb', error);
+            console.log('errorbbbbb 5', error);
             // Navigation.goBack();
           });
       })
       .catch(error => {
         setLoading(false);
-        console.log('errorbbbbb', error);
+        console.log('errorbbbbb 6', error);
       });
   };
 
@@ -312,7 +317,7 @@ const EditStory = ({route}) => {
         <ImageBackground
           source={require('../../Assets/Images/newimages/bgImg2.png')}
           resizeMode="cover"
-          style={{flex: 1}}>
+          style={{ flex: 1 }}>
           <View
             style={{
               justifyContent: 'center',
@@ -323,12 +328,12 @@ const EditStory = ({route}) => {
           </View>
         </ImageBackground>
       ) : (
-        <View style={{flex: 1, paddingBottom: '9%'}}>
+        <View style={{ flex: 1, paddingBottom: '9%' }}>
           <MainHeader title={'Edit'} />
           <ScrollView
             alwaysBounceVertical={true}
             keyboardShouldPersistTaps="always">
-            <SafeAreaView edges={['bottom', 'left', 'right']} style={{flex: 1}}>
+            <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
               <View
                 style={[
                   styles.container,
@@ -353,26 +358,33 @@ const EditStory = ({route}) => {
                       marginBottom: 15,
                     }}>
                     <Image
-                      source={require('../../Assets/Images/newimages/profile2.png')}
+                      // source={require('../../Assets/Images/newimages/profile2.png')}
+                      source={{
+                        uri: `https://shareitstoryapp.com${AuthReducer?.userData?.user?.profile?.profile_pic}`,
+                      }}
                       // source={{ uri: 'http://23.26.137.178/media/media/john.png'}}
                       style={{
-                        width: 32,
-                        height: 32,
+                        width: 40,
+                        height: 40,
                         alignContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center',
+                        borderColor: '#7D7D7D',
+                  borderWidth: 2,
+                  borderRadius: 55,
                         // marginLeft: 20,
                         // marginRight: 10,
                       }}
                     />
 
+
                     <View
                       style={{
                         flexDirection: 'column',
-                        marginHorizontal: '5%',
+                        marginHorizontal: '6%',
                       }}>
                       <InteractParagraph
-                        p={'asdasdsd'}
+                        p={AuthReducer?.userData?.user?.profile?.first_name + ' ' + AuthReducer?.userData?.user?.profile?.last_name}
                         colors={'#D5D5D5'}
                         Fontsize={16}
                         fw={'bold'}
@@ -387,7 +399,7 @@ const EditStory = ({route}) => {
                   </View>
                 </View>
 
-                <View style={{marginTop: 5}}>
+                <View style={{ marginTop: 5 }}>
                   <Heading
                     // mt={'5%'}
                     ml={5}
@@ -428,7 +440,8 @@ const EditStory = ({route}) => {
                       fontSize: 13,
                       marginTop: 10,
                       marginBottom: 15,
-                      padding: 10,
+                      paddingVertical: 10,
+                      paddingHorizontal: 2,
                       marginLeft: 5,
                     }}
                     placeholder={'Title'}
@@ -438,7 +451,7 @@ const EditStory = ({route}) => {
                   />
                 </View>
 
-                <View style={{marginLeft: 10}}>
+                <View style={{ marginLeft: 10 }}>
                   {/* {errorTitle && (
                     <Text style={styles.errorTextStyle}>
                       Please Enter Title
@@ -451,7 +464,7 @@ const EditStory = ({route}) => {
 
                 <View style={styles.richTextContainer}>
                   <KeyboardAvoidingView
-                    style={{flex: 1}}
+                    style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : null}
                     keyboardVerticalOffset={65}>
                     <RichEditor
@@ -499,7 +512,7 @@ const EditStory = ({route}) => {
                   />
                 </View>
               </View>
-              <View style={{marginLeft: 30}}>
+              <View style={{ marginLeft: 30 }}>
                 {!!errorDesc && (
                   <Text style={styles.errorTextStyle}>{errorDesc}</Text>
                 )}
@@ -580,7 +593,7 @@ const EditStory = ({route}) => {
               </View>
 
               <Modal isVisible={isLoadingModalVisible}>
-                <SafeAreaView style={{flex: 1}}>
+                <SafeAreaView style={{ flex: 1 }}>
                   <View
                     style={{
                       flex: 1,
@@ -589,7 +602,7 @@ const EditStory = ({route}) => {
                       marginTop: 50,
                     }}>
                     <ActivityIndicator size={40} color={COLORS.primary} />
-                    <Text style={{color: COLORS.primary}}>Loading....</Text>
+                    <Text style={{ color: COLORS.primary }}>Loading....</Text>
                   </View>
                 </SafeAreaView>
               </Modal>

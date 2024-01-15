@@ -104,12 +104,12 @@ export const Login = () => {
       var formdataEmail = new FormData();
       formdataEmail.append('email', valueEmail);
 
-      setLoading(true);
+      // setLoading(true);
 
       postRequest(`${BASE_URL}/users/verify-email-exists/`, formdataEmail)
         .then(result => {
-          // setLoading(false);
-          console.log('Result: ', result.success);
+          setLoading(false);
+          console.log('Result 1: ', result.success);
           if (result.success) {
             setLoading(false);
             var formdata = new FormData();
@@ -157,7 +157,7 @@ export const Login = () => {
         })
         .catch(error => {
           setLoading(false);
-          console.log('error', error);
+          console.log('error 1', error);
           // onChangeTextEmail('');
         });
       // onChangeError('');
@@ -311,8 +311,8 @@ export const Login = () => {
                         }}
                         style={{
                           flex: 1,
-                          width: '90%',
-                          marginHorizontal: '5%',
+                          width: '76%',
+                          marginHorizontal: '12%',
                           height: 50,
                           backgroundColor: '#7ACCCA',
                           // borderWidth: 1,

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -24,37 +24,37 @@ import Icondark1 from '../../Assets/Images/Iconimage/circle.png';
 import Icondark2 from '../../Assets/Images/Iconimage/star.png';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
 import InteractAvatar from '../../Components/ReusableComponent/Avatar';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Header from '../../Components/ReusableComponent/Header';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
-import {useDispatch, useSelector} from 'react-redux';
-import {getRequest, postRequest} from '../../utils/fetch';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRequest, postRequest } from '../../utils/fetch';
 // import {BASE_URL} from '../../utils/api';
 // import RenderHTML from 'react-native-render-html';
 import Loader from '../../Components/ReusableComponent/Loader';
 import NetInfo from '@react-native-community/netinfo';
-import {RefreshControl} from 'react-native';
-import {ToastAndroid} from 'react-native';
-import {ActivityIndicator, Avatar} from 'react-native-paper';
+import { RefreshControl } from 'react-native';
+import { ToastAndroid } from 'react-native';
+import { ActivityIndicator, Avatar } from 'react-native-paper';
 import base64 from 'react-native-base64';
 import HTMLView from 'react-native-htmlview';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import {Rating} from 'react-native-ratings';
+import { Rating } from 'react-native-ratings';
 //Refresh Leagues Code
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import MiniHeader from '../../Components/MiniHeader';
-import {SingleStoryUpdateLocally} from '../../Store/Reducers/SingleStoryReducer';
+import { SingleStoryUpdateLocally } from '../../Store/Reducers/SingleStoryReducer';
 import Story2 from '../Story2';
 import MainHeader from '../../Components/MainHeader';
 import Heading from '../../Components/ReusableComponent/Heading';
 import RatingStars from '../../Components/RatingStars';
-import {getRequestWithOutBody, postRequestWithToken} from '../../App/fetch';
-import {BASE_URL} from '../../App/api';
-import {ModalView} from '../../Components/Modal';
-import {updateStoriesList} from '../../Store/Reducers/StoriesReducer';
+import { getRequestWithOutBody, postRequestWithToken } from '../../App/fetch';
+import { BASE_URL } from '../../App/api';
+import { ModalView } from '../../Components/Modal';
+import { updateStoriesList } from '../../Store/Reducers/StoriesReducer';
 
-export default function Story({route}) {
+export default function Story({ route }) {
   // console.log('route.params', route.params.storyData.id);
   const dataFromParams = route.params.storyData;
   console.log('route.params', dataFromParams.id);
@@ -304,7 +304,7 @@ export default function Story({route}) {
               borderRadius: 10,
               marginTop: 15,
             }}>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <View>
                 {item?.item?.user?.profile_pic ? (
                   <View
@@ -320,7 +320,7 @@ export default function Story({route}) {
                     }}>
                     <Image
                       source={{
-                        uri: `http://23.26.137.178${item?.item?.user?.profile_pic}`,
+                        uri: `https://shareitstoryapp.com${item?.item?.user?.profile_pic}`,
                       }}
                       style={{
                         width: 29,
@@ -369,7 +369,9 @@ export default function Story({route}) {
                   Stylefont={'normal'}
                   Fontweight={'400'}
                   Fontsize={14}
-                  Heading={item?.item?.user?.first_name}
+                  Heading={item?.item?.user?.first_name == '-' ? item?.item?.user?.display_name : item?.item?.user?.first_name + ' ' + item?.item?.user?.last_name}
+                  // Heading={item.user.first_name == '-' ? item.user.display_name : item.user.first_name + ' ' + item.user.last_name}
+
                   Color={'#7ACCCA'}
                 />
                 <Heading
@@ -384,8 +386,8 @@ export default function Story({route}) {
                 />
               </View>
             </View>
-            <View style={{marginLeft: 47, marginTop: 5}}>
-              <Text style={{fontSize: 10, color: '#CBCBCB'}}>
+            <View style={{ marginLeft: 47, marginTop: 5 }}>
+              <Text style={{ fontSize: 10, color: '#CBCBCB' }}>
                 {item?.item?.comments}
               </Text>
             </View>
@@ -408,11 +410,11 @@ export default function Story({route}) {
             marginVertical: '10%',
             borderRadius: 20,
             padding: 20,
-            minHeight: 300,
+            // minHeight: 300,
             justifyContent: 'space-between',
             flexDirection: 'column',
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <View>
               {dataFromParams.user.profile_pic == '' ? (
                 <Image
@@ -424,7 +426,7 @@ export default function Story({route}) {
                     alignContent: 'center',
                     alignItems: 'center',
                     alignSelf: 'center',
-                    marginLeft: 14,
+                    // marginLeft: 14,
                     marginRight: 10,
                   }}
                 />
@@ -437,13 +439,13 @@ export default function Story({route}) {
                     width: 31,
                     height: 31,
                     justifyContent: 'center',
-                    marginLeft: 14,
+                    // marginLeft: 14,
                     marginRight: 10,
                   }}>
                   <Image
                     // source={require('../../Assets/Images/newimages/profile2.png')}
                     source={{
-                      uri: `http://23.26.137.178${targetStory.user.profile_pic}`,
+                      uri: `https://shareitstoryapp.com${targetStory.user.profile_pic}`,
                     }}
                     style={{
                       width: 29,
@@ -466,7 +468,7 @@ export default function Story({route}) {
                 Fontweight={'400'}
                 Fontsize={14}
                 Heading={
-                  targetStory.user.first_name + ' ' + targetStory.user.last_name
+                  targetStory.user.first_name == '-' ? targetStory.user.display_name : targetStory.user.first_name + ' ' + targetStory.user.last_name
                 }
                 Color={'#7ACCCA'}
               />
@@ -489,12 +491,12 @@ export default function Story({route}) {
                   console.log('CLICK');
                   BookmarkStory();
                 }}>
-                <Image source={require('../../Assets/Images/bookmark.png')} />
+                <Image source={require('../../Assets/Images/bookmark.png')} style={{ width: 18 }} />
               </Pressable>
             </View>
           </View>
 
-          <View style={{marginHorizontal: '4%', marginTop: '4%'}}>
+          <View style={{ marginHorizontal: '1%', marginTop: '4%' }}>
             <Heading
               mt={2}
               // ml={45}
@@ -506,7 +508,7 @@ export default function Story({route}) {
             />
           </View>
 
-          <View style={{marginHorizontal: '4%', marginTop: '2%'}}>
+          <View style={{ marginHorizontal: '1%', marginTop: '2%' }}>
             <Heading
               mt={2}
               // ml={45}
@@ -518,14 +520,14 @@ export default function Story({route}) {
             />
           </View>
 
-          <View style={{marginHorizontal: '4%', marginTop: '2%'}}>
+          <View style={{ marginHorizontal: '1%', marginTop: '2%' }}>
             <HTMLView
               value={`<div>${targetStory.content}</div>`}
               stylesheet={stylesForHtmlText}
             />
           </View>
 
-          <View style={{marginHorizontal: '4%'}}>
+          <View style={{ marginHorizontal: '1%' }}>
             <View
               style={{
                 borderBottomColor: 'white',
@@ -547,33 +549,33 @@ export default function Story({route}) {
                 }}>
                 <Pressable
                   onPress={() => {
-                    console.log('Like');
+                    setModalVisible(true);
                   }}>
                   <Image
                     source={require('../../Assets/Images/like.png')}
-                    style={{width: 13, height: 13}}
+                    style={{ width: 15, height: 15 }}
                   />
                 </Pressable>
-                <Text style={{color: '#7ACCCA', fontSize: 12}}>
+                <Text style={{ color: '#7ACCCA', fontSize: 14 }}>
                   {'  ' + targetStory.likes_sum !== 0 &&
-                  targetStory.likes_sum !== null
+                    targetStory.likes_sum !== null
                     ? '  ' + targetStory.likes_sum
                     : '  ' + 0}
                 </Text>
                 <Text>{'   '}</Text>
                 <Pressable
                   onPress={() => {
-                    console.log('comment');
+                    setModalVisible(true);
                   }}>
                   <Image
                     source={require('../../Assets/Images/comment.png')}
                     resizeMode="contain"
-                    style={{width: 13, height: 13}}
+                    style={{ width: 15, height: 15 }}
                   />
                 </Pressable>
-                <Text style={{color: '#7ACCCA', fontSize: 12}}>
+                <Text style={{ color: '#7ACCCA', fontSize: 14 }}>
                   {'  ' + targetStory.comments_sum !== 0 &&
-                  targetStory.comments_sum !== null
+                    targetStory.comments_sum !== null
                     ? '  ' + targetStory.comments_sum
                     : ' ' + 0}
                 </Text>
@@ -584,12 +586,12 @@ export default function Story({route}) {
                   }}>
                   <Image
                     source={require('../../Assets/Images/report.png')}
-                    style={{width: 15, height: 15}}
+                    style={{ width: 17, height: 17 }}
                   />
                 </Pressable>
-                <Text style={{color: '#7ACCCA', fontSize: 12}}>
+                <Text style={{ color: '#7ACCCA', fontSize: 14 }}>
                   {'  ' + targetStory.reports_sum !== 0 &&
-                  targetStory.reports_sum !== null
+                    targetStory.reports_sum !== null
                     ? '  ' + targetStory.reports_sum
                     : ' ' + 0}
                 </Text>
@@ -601,20 +603,25 @@ export default function Story({route}) {
                   }}>
                   <Image
                     source={require('../../Assets/Images/view.png')}
-                    style={{width: 14, height: 14}}
+                    style={{ width: 16, height: 16 }}
                     resizeMode="contain"
                   />
                 </Pressable>
-                <Text style={{color: '#7ACCCA', fontSize: 12}}>
+                <Text style={{ color: '#7ACCCA', fontSize: 14 }}>
                   {'  ' + targetStory.views_sum !== 0 &&
-                  targetStory.views_sum !== null
+                    targetStory.views_sum !== null
                     ? '  ' + targetStory.likes_sum
                     : '  ' + 0}
                 </Text>
               </View>
-              <View style={{flexDirection: 'row', marginLeft: 'auto'}}>
-                <RatingStars rating={targetStory.rating_avg} />
-              </View>
+              <Pressable
+                onPress={() => {
+                  setModalVisible(true);
+                }}>
+                <View style={{ flexDirection: 'row', marginLeft: 'auto' }}>
+                  <RatingStars rating={targetStory.rating_avg} />
+                </View>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -629,10 +636,10 @@ export default function Story({route}) {
           onPress={() => {
             setModalVisible(true);
           }}>
-          <View style={{alignItems: 'flex-end'}}>
+          <View style={{ alignItems: 'flex-end' }}>
             <Image
               source={require('../../Assets/Images/commentoutline.png')}
-              style={{width: 15, height: 15}}
+              style={{ width: 15, height: 15 }}
             />
           </View>
         </Pressable>
@@ -704,7 +711,7 @@ export default function Story({route}) {
         <ImageBackground
           source={require('../../Assets/Images/newimages/bgImg2.png')}
           resizeMode="cover"
-          style={{flex: 1}}>
+          style={{ flex: 1 }}>
           <View
             style={{
               justifyContent: 'center',

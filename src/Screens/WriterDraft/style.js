@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     elevation: 4,
     fontSize: 20,
     borderRadius: 20,
+    // padding: 10
+    // margin: 10
   },
 
   richTextToolbarStyle: {
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
   errorTextStyle: {
     color: '#FF0000',
     marginBottom: 10,
-    marginLeft: 10,
+    // marginLeft: 7,
   },
 
   saveButtonStyle: {

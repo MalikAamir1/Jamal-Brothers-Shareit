@@ -1,5 +1,5 @@
-import {Formik} from 'formik';
-import React, {useState} from 'react';
+import { Formik } from 'formik';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
@@ -9,26 +9,29 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import COLORS from '../../Assets/Style/Color';
 import ButtonComp from '../../Components/ReusableComponent/Button';
 import Heading from '../../Components/ReusableComponent/Heading';
 import Input from '../../Components/ReusableComponent/Input';
 import * as yup from 'yup';
 // import SafeArea from '../../Components/ReusableComponent/Safearea';
-import {Loader} from '../../Components/ReusableComponent/Loader';
+import { Loader } from '../../Components/ReusableComponent/Loader';
 import InteractParagraph from '../../Components/ReusableComponent/Paragraph';
-import {BASE_URL} from '../../App/api';
-import {postRequestWithToken} from '../../App/fetch';
-import {useNavigation} from '@react-navigation/native';
+import { BASE_URL } from '../../App/api';
+import { postRequestWithToken } from '../../App/fetch';
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SafeArea from '../../Components/ReusableComponent/SafeArea';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import MiniHeader from '../../Components/MiniHeader';
+import { useSelector } from 'react-redux';
 
-export const ChangePassword = ({route}) => {
+export const ChangePassword = ({ route }) => {
   const [passHide, setPassHide] = useState(false);
   const [loading, setLoading] = useState(false);
+  const AuthReducer = useSelector(state => state.AuthReducer);
+  console.log('route', AuthReducer)
 
   const [oldPass, setOldPass] = useState('');
   const [newPass, setNewPass] = useState('');
@@ -39,7 +42,7 @@ export const ChangePassword = ({route}) => {
   let loginValidationScheme = yup.object().shape({
     password: yup
       .string()
-      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required('Password is required '),
   });
 
@@ -79,47 +82,65 @@ export const ChangePassword = ({route}) => {
 
   function updatePassword() {
     if (oldPass !== '') {
-      if (newConfirmPass !== '') {
-        if (newPass === newConfirmPass) {
-          if (hasValidPassword(newConfirmPass)) {
-            console.log('valuePass: ', newPass);
-            console.log('valueConfirmPass: ', newConfirmPass);
-            console.log('Match');
+      if (newPass !== '') {
+        if (newConfirmPass !== '') {
+          if (newPass === newConfirmPass) {
+            if (hasValidPassword(newConfirmPass)) {
+              console.log('valuePass: ', newPass);
+              console.log('valueConfirmPass: ', newConfirmPass);
+              console.log('Match');
+              onChangeError('')
 
-            var formdataUpdatePasswrod = new FormData();
-            formdataUpdatePasswrod.append('new_password', newConfirmPass);
+              var formdataUpdatePasswrod = new FormData();
+              formdataUpdatePasswrod.append('old_password', oldPass);
+              formdataUpdatePasswrod.append('new_password', newConfirmPass);
 
-            setLoading(true);
-            postRequestWithToken(
-              `${BASE_URL}/users/update-password/`,
-              formdataUpdatePasswrod,
-              route.params,
-            )
-              .then(result => {
-                console.log(result);
-                Alert.alert('Success', 'Password updated successfully');
-                setLoading(false);
-                Navigation.navigate('bottombar');
-              })
-              .catch(error => {
-                console.log('error', error);
-                setLoading(false);
-              });
+              setLoading(true);
+              postRequestWithToken(
+                `${BASE_URL}/users/change-password/`,
+                formdataUpdatePasswrod,
+                AuthReducer.userData.token,
+              )
+                .then(result => {
+                  console.log(result);
+                  if (result?.error) {
+                    setLoading(false);
+                    Alert.alert('', result?.error)
+                  }
+                  else {
+                    Alert.alert('Success', 'Password updated successfully');
+                    setLoading(false);
+                    Navigation.navigate('bottombar');
+                  }
+                })
+                .catch(error => {
+                  console.log('error', error);
+                  Alert.alert('', error)
+                  setLoading(false);
+                });
+            } else {
+              console.log('Not Match');
+              // alert(
+              //   'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+              // );
+              onChangeError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+            }
           } else {
             console.log('Not Match');
-            alert(
-              'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
-            );
+            // alert('Password and confirm Password do not match');
+            onChangeError('Password and confirm Password do not match');
           }
         } else {
-          console.log('Not Match');
-          alert('Password and confirm Password do not match');
+          // alert('Confirm Password should not be Empty');
+          onChangeError('Confirm Password should not be Empty');
         }
       } else {
-        alert('Confirm Password should not be Empty');
+        // alert('Password should not be Empty');
+        onChangeError('New Password should not be Empty');
       }
     } else {
-      alert('Password should not be Empty');
+      // alert('Password should not be Empty');
+      onChangeError('Current Password should not be Empty');
     }
   }
 
@@ -127,7 +148,7 @@ export const ChangePassword = ({route}) => {
     <>
       {/* <SafeArea> */}
       <Formik
-        initialValues={{email: '', password: ''}}
+        initialValues={{ email: '', password: '' }}
         validateOnMount={true}
         onSubmit={values => {
           simpleLogin(values);
@@ -147,7 +168,7 @@ export const ChangePassword = ({route}) => {
               {loading ? (
                 <Loader />
               ) : (
-                <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -165,7 +186,7 @@ export const ChangePassword = ({route}) => {
                       borderRadius: 15,
                       // marginTop: '15%',
                     }}>
-                    <View style={{marginTop: '8%', marginBottom: '5%'}}>
+                    <View style={{ marginTop: '8%', marginBottom: '5%' }}>
                       <View>
                         <Input
                           title={'Current Password'}
@@ -189,7 +210,7 @@ export const ChangePassword = ({route}) => {
                         )}
                       </View>
 
-                      <View style={{marginTop: '8%'}}>
+                      <View style={{ marginTop: '8%' }}>
                         <Input
                           title={'New Password'}
                           urlImg={require('../../Assets/Images/loginpassword.png')}
@@ -213,7 +234,7 @@ export const ChangePassword = ({route}) => {
                         )}
                       </View>
 
-                      <View style={{marginTop: '8%', marginBottom: '5%'}}>
+                      <View style={{ marginTop: '8%', marginBottom: '1%' }}>
                         <Input
                           title={'Confirm New Password'}
                           urlImg={require('../../Assets/Images/loginpassword.png')}
@@ -242,7 +263,7 @@ export const ChangePassword = ({route}) => {
                         <>
                           <InteractParagraph
                             p={error}
-                            mv={4}
+                            // mv={2}
                             colors={'#FA2D2D'}
                           />
                         </>
